@@ -6,18 +6,17 @@ import { useState } from "react";
 
 export default function Home() {
   const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Replace with API call
-    console.log("Send SMS to:", `+43${phone}`);
-    alert(`Bestätigt: +43${phone}`);
+    setLoading(true);
 
     const payload = {
-      phone: phone.startsWith("+") ? phone : `+43${phone.replace(/^0+/, "")}`, // phone state
+      phone: phone.startsWith("+") ? phone : `+43${phone.replace(/^0+/, "")}`,
       message: `Sehr geehrte/r Kunde, dies ist eine Test-SMS. Ihr Code: 1234`
     };
-  
+
     try {
       const res = await fetch("/api/send-sms", {
         method: "POST",
@@ -29,6 +28,8 @@ export default function Home() {
       alert("SMS gesendet: " + json.sid);
     } catch (err: any) {
       alert("SMS fehlgeschlagen: " + err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -65,9 +66,10 @@ export default function Home() {
 
           <button
             type="submit"
-            className="mt-6 w-full h-12 rounded-none bg-white text-black border border-black/[0.08] font-medium hover:brightness-95 transition"
+            disabled={loading}
+            className="mt-6 w-full h-12 rounded-none bg-white text-black border border-black/[0.08] font-medium hover:brightness-95 transition disabled:opacity-60"
           >
-            Bestätigen
+            {loading ? "Sende…" : "Bestätigen"}
           </button>
 
           <p className="mt-4 text-sm text-zinc-500 dark:text-zinc-400">
