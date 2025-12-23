@@ -22,25 +22,32 @@ export default function OrganisationMemberModal({
   if (!open) return null;
 
   async function handleSubmit() {
-    if (!email || !confirm || !agb) return;
+    if (!email || !confirm || !agb || loading) return;
 
     setLoading(true);
 
-    await fetch('/api/new-member', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        firstName,
-        lastName,
-        email,
-        age,
-        phone,
-        registrator,
-      }),
-    });
+    try {
+      const res = await fetch('/api/new-member', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          age,
+          phone,
+          registrator,
+          confirm,
+          agb,
+        }),
+      });
 
-    setLoading(false);
-    onClose();
+      if (res.ok) {
+        onClose();
+      }
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -128,18 +135,13 @@ export default function OrganisationMemberModal({
 
         {/* Footer */}
         <div className="flex items-center justify-between">
-          {/* Instagram */}
           <button
             type="button"
             className="flex items-center gap-2 text-white/60 text-sm hover:text-white"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M7.75 2h8.5C19.44 2 22 4.56 22 7.75v8.5C22 19.44 19.44 22 16.25 22h-8.5C4.56 22 2 19.44 2 16.25v-8.5C2 4.56 4.56 2 7.75 2Zm0 1.5C5.39 3.5 3.5 5.39 3.5 7.75v8.5c0 2.36 1.89 4.25 4.25 4.25h8.5c2.36 0 4.25-1.89 4.25-4.25v-8.5c0-2.36-1.89-4.25-4.25-4.25h-8.5Zm9.75 3a1 1 0 110 2 1 1 0 010-2ZM12 7a5 5 0 110 10 5 5 0 010-10Zm0 1.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7Z" />
-            </svg>
             Follow on Instagram
           </button>
 
-          {/* Submit */}
           <button
             onClick={handleSubmit}
             disabled={loading || !confirm || !agb}
@@ -153,7 +155,6 @@ export default function OrganisationMemberModal({
   );
 }
 
-/* Input */
 function Input({
   placeholder,
   type = 'text',

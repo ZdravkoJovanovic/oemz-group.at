@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { FiUsers, FiSearch, FiPlus, FiMessageSquare } from 'react-icons/fi';
 
 export default function Navbar() {
@@ -26,7 +27,9 @@ export default function Navbar() {
 
       {/* LEFT */}
       <div className="flex items-center">
-        <Image src="/omz-group-logo.svg" alt="ÖMZ Group" width={60} height={60} />
+        <Link href="/landing-page" className="cursor-pointer" prefetch>
+          <Image src="/omz-group-logo.svg" alt="ÖMZ Group" width={60} height={60} />
+        </Link>
 
         <div className="mx-4 flex items-center">
           <div className="h-7 w-px bg-[#fedaf8]" />

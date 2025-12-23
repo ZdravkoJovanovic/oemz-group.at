@@ -1,6 +1,7 @@
 import Navbar from '../components/navbar';
 import Sidebar from '../components/sidebar';
-import Members from '../components/members';
+import PaymentHeader from '../components/payment-header';
+import Payments from '../components/payments';
 import AdminGuard from '../components/admin-guard';
 
 export default function Home() {
@@ -13,7 +14,8 @@ export default function Home() {
           <Sidebar />
 
           <main className="flex-1 p-12 overflow-hidden">
-            <Members />
+            <PaymentHeader />
+            <Payments />
           </main>
         </div>
       </div>
